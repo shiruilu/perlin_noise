@@ -14,8 +14,8 @@ PerlinNoise pn(22);
 
 void clearCanvas() {
   // White canvas
-  for (int i=0; i < height; i++) {
-    for (int j =0; j < width; j++) {
+  for (unsigned int i=0; i < height; i++) {
+    for (unsigned int j =0; j < width; j++) {
       image.r[i*width+j] = 255;
       image.g[i*width+j] = 255;
       image.b[i*width+j] = 255;
@@ -28,7 +28,7 @@ void drawLine(int x1, int x2, int y1, int y2, bool noise) {
   const unsigned int stroke = 2;
   const unsigned int variance=5;
   if (y1 == y2) {
-    for (unsigned int j=x1; j < x2; j++) {
+    for (int j=x1; j < x2; j++) {
       unsigned int i = y1; //Start at y of the canvas
       if (noise) {
         //assert( pn.noise(10.0*j/width, 0.8, 0.8) <=1 && pn.noise(10.0*j/width, 0.8, 0.8) >= 0);
@@ -44,7 +44,7 @@ void drawLine(int x1, int x2, int y1, int y2, bool noise) {
     }
   }
   else if (x1 == x2) {
-    for (unsigned int i=y1; i < y2; i++) {
+    for (int i=y1; i < y2; i++) {
       unsigned int j = x1; //Start at x of the canvas
       if (noise) {
         j += variance * (pn.noise(0.8, 20.0*i/height, 0.8) - 0.5) ;
@@ -96,8 +96,8 @@ void drawCircle() {
   const unsigned int RR=110;
   const unsigned int CX=width/2;
   const unsigned int CY=height/2;
-  for (int i=0; i < height; i++) {
-    for (int j =0; j < width; j++) {
+  for (unsigned int i=0; i < height; i++) {
+    for (unsigned int j =0; j < width; j++) {
       if((i-CY)*(i-CY) + (j-CX)*(j-CX) <=RR*RR && (i-CY)*(i-CY) + (j-CX)*(j-CX) >=R*R) {
         image.r[i*width+j] = 0;
         image.g[i*width+j] = 0;
