@@ -1,4 +1,5 @@
 #include "PerlinNoise.h"
+#include "ColorTable.hpp"
 #include "ppm.hpp"
 
 #include <assert.h>
@@ -6,7 +7,7 @@
 #include <iostream>
 #include <cstring>
 
-unsigned int width = 600, height = 450;
+unsigned int width = 1024, height = 1024;
 // Create an empty PPM image
 PPM image(width, height);
 // Init with seed
@@ -80,14 +81,29 @@ void wood() {
 }
 
 void default_noise() {
+  ColorTable ct("../resources/GMT_seis.rgb");
+  for (int i = 0; i < 256; ++i) {
+    // std::cout << ct.rgb[i][0] << "," << ct.rgb[i][1] << "," << ct.rgb[i][2] << std::endl;
+  }
+
   for (unsigned int i=0; i < height; i++) {
     for (unsigned int j =0; j < width; j++) {
-      double n = pn.noise( 1.0*i/width, 1.0*j/height, 1.0*(i+j)/width );
+      // 2d noise
+      // double n = pn.noise( 5.0*i/width, 5.0 - 5.0*j/height, 0.8 );
+      // 3d noise
+      double n = pn.noise( 10.0*i/width, 10.0*j/height, 10.0*(i*j)/(height*width) );
       //n = 20*n - floor(20*n);
-      image.r[i*width+j] = floor(255 * n);
-      image.g[i*width+j] = floor(255 * n);
-      image.b[i*width+j] = floor(255 * n);
+      assert( floor(255*n) < MAX_COLOR_VALUE );
+      image.r[i*width+j] = ct.rgb[floor(255 * n)][0];
+      image.g[i*width+j] = ct.rgb[floor(255 * n)][1];
+      image.b[i*width+j] = ct.rgb[floor(255 * n)][2];
+      // image.r[i*width+j] = ct.rgb[i%256][0];
+      // image.g[i*width+j] = ct.rgb[i%256][1];
+      // image.b[i*width+j] = ct.rgb[i%256][2];
+      // std::cout << ct.rgb[i%256][0] << "," << ct.rgb[i%256][1] << "," << ct.rgb[i%256][2];
+      // std::cout << image.r[i*width+j] << "," << image.g[i*width+j] << "," << image.b[i*width+j];
     }
+    // std::cout << std::endl;
   }
 }
 
